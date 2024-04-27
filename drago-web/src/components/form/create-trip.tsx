@@ -78,7 +78,7 @@ const CreateTripForm = () => {
               pickup: ((pickupValue as any))?.value?.place_id,
               dropoff: ((dropoffValue as any))?.value?.place_id,
               business_id: defaultBusiness?.id,
-              courier_id: data.courier.value,
+              courier_id: data.courierId,
             },
           },
           onCompleted: () => {
@@ -154,6 +154,7 @@ const CreateTripForm = () => {
         <Button
           color="primary"
           className="font-semibold items-center"
+          type="submit"
         >
           {creatingTrip ? <loaders.Submitting /> : `Create`}
         </Button>

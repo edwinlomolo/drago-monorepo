@@ -42,7 +42,7 @@ function Header() {
   const router = useRouter()
 
   return authLoading ? null : (
-    <div className="flex flex-row justify-between w-full">
+    <div className="flex flex-row border justify-between w-full">
       <div className="flex flex-row my-4 mx-4">
         {!hasBusinessListing && isAuthed && (
           <Button variant="link" onClick={() => router.push("/dashboard")} size="icon">
