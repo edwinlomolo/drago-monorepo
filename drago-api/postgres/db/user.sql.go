@@ -198,7 +198,7 @@ func (q *Queries) GetUser(ctx context.Context, email string) (User, error) {
 }
 
 const getUsersByID = `-- name: GetUsersByID :many
-SELECT id, firstname, lastname, phone, email, created_at, updated_at FROM users
+SELECT id, firstname, lastname, phone, email, onboarding, created_at, updated_at FROM users
 WHERE id IN ($1::uuid[])
 `
 
@@ -217,6 +217,7 @@ func (q *Queries) GetUsersByID(ctx context.Context, ids []uuid.UUID) ([]User, er
 			&i.Lastname,
 			&i.Phone,
 			&i.Email,
+			&i.Onboarding,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {

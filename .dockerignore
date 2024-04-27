@@ -1,0 +1,6 @@
+# flyctl launch added from .gitignore
+**/drago-api/.env
+**/drago-api/.env.example
+**/drago-api/.vscode
+**/drago-web/
+fly.toml

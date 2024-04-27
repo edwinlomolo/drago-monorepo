@@ -27,7 +27,7 @@ ENV MINIMUM_HOURLY_WAGE=$MINIMUM_HOURLY_WAGE
 
 RUN mkdir -p go/src/app
 WORKDIR go/src/app
-COPY ./drago-api .
+COPY ./drago-api/ .
 RUN go mod download && go mod verify
 RUN CGO_ENABLED=0 GOOS=linux go build -o drago-api
 
