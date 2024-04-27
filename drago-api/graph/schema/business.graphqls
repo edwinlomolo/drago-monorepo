@@ -1,0 +1,12 @@
+type Business {
+  id: UUID!
+  businessType: String!
+  name: String!
+  phone: String!
+  logo: String!
+  hasInHouseLogistic: Boolean!
+  location: Gps!
+  dateCreated: Time!
+  created_at: Time!
+  updated_at: Time!
+}

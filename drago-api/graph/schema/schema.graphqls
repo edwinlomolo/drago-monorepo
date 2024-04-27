@@ -1,0 +1,37 @@
+scalar UUID
+scalar Time
+
+input NewBusinessInput {
+  name: String!
+  phone: String!
+  hasInHouseLogistic: Boolean!
+  businessType: String!
+  logo: String!
+  dateCreated: Time!
+}
+
+input NewCourierInput {
+  firstname: String!
+  lastname: String!
+  phone: String!
+  business_id: UUID!
+}
+
+input NewTrip {
+  pickup: String!
+  dropoff: String!
+  courier_id: UUID!
+  business_id: UUID!
+}
+
+type Query {
+  getBusinessBelongingToUser: [Business!]!
+  getBusinessCouriers(id: UUID!): [Courier!]!
+  getTripsBelongingToBusiness(id: UUID!): [Trip!]!
+}
+
+type Mutation {
+  createBusiness(input: NewBusinessInput!): Business!
+  addCourier(input: NewCourierInput!): Courier!
+  createTrip(input: NewTrip!): Trip!
+}

@@ -1,0 +1,18 @@
+type Courier {
+  id: UUID!
+  firstname: String!
+  lastname: String!
+  phone: String!
+  verified: Boolean!
+  status: CourierStatus!
+  business_id: UUID!
+  user_id: UUID!
+  created_at: Time!
+  updated_at: Time!
+}
+
+enum CourierStatus {
+  ONBOARDING
+  OFFLINE
+  ONLINE
+}

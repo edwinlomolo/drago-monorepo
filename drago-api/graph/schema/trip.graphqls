@@ -1,0 +1,26 @@
+type Trip {
+  id: UUID!
+  dropoff_address: String!
+  pickup: Gps!
+  dropoff: Gps!
+  distance: String!
+  status: TripStatus!
+  cost: Int
+  courier_id: UUID
+  courier: Courier!
+  created_at: Time!
+  updated_at: Time!
+}
+
+enum TripStatus {
+  CREATED
+  COURIER_ARRIVING
+  COURIER_EN_ROUTE
+  CANCELLED
+  COMPLETED
+}
+
+type Gps {
+  lat: Float!
+  lng: Float!
+}
