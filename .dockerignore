@@ -3,4 +3,5 @@
 **/drago-api/.env.example
 **/drago-api/.vscode
 **/drago-web/
+**/drago-api/.github/
 fly.toml
