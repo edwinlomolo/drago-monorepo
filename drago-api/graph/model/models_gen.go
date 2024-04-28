@@ -35,6 +35,11 @@ type Mutation struct {
 type Query struct {
 }
 
+type SetDefaultUserBusiness struct {
+	UserID     uuid.UUID `json:"userId"`
+	BusinessID uuid.UUID `json:"businessId"`
+}
+
 type Trip struct {
 	ID             uuid.UUID  `json:"id"`
 	DropoffAddress string     `json:"dropoff_address"`

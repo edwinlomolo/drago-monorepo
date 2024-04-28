@@ -8,6 +8,7 @@ import (
 	"github.com/edwinlomolo/drago-api/internal"
 	"github.com/edwinlomolo/drago-api/postgres/db"
 	"github.com/edwinlomolo/drago-api/repositories"
+	"github.com/google/uuid"
 )
 
 type UserController struct {
@@ -63,4 +64,22 @@ func (u *UserController) SignIn(ctx context.Context, input model.SignIn) (*model
 	session.Token = token
 
 	return session, nil
+}
+
+func (u *UserController) SetDefaultBusiness(ctx context.Context, userID, businessID uuid.UUID) (*model.User, error) {
+	user, err := u.userRepository.SetDefaultBusiness(ctx, userID, businessID)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, err
+}
+
+func (u *UserController) GetUserByID(ctx context.Context, userID uuid.UUID) (*model.User, error) {
+	user, err := u.userRepository.GetUserByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

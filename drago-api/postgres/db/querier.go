@@ -32,8 +32,10 @@ type Querier interface {
 	GetCourierByPhone(ctx context.Context, phone string) (Courier, error)
 	GetSession(ctx context.Context, userID uuid.NullUUID) (Session, error)
 	GetTripsBelongingToBusiness(ctx context.Context, businessID uuid.UUID) ([]GetTripsBelongingToBusinessRow, error)
-	GetUser(ctx context.Context, email string) (User, error)
+	GetUserByEmail(ctx context.Context, email string) (User, error)
+	GetUserByID(ctx context.Context, id uuid.UUID) (User, error)
 	GetUsersByID(ctx context.Context, ids []uuid.UUID) ([]User, error)
+	UpdateUserDefaultBusiness(ctx context.Context, arg UpdateUserDefaultBusinessParams) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)

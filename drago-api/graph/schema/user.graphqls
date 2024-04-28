@@ -1,0 +1,14 @@
+type User {
+  id: UUID!
+  firstname: String!
+  lastname: String!
+  email: String!
+  metadata: UserMetadata
+  onboarding: Boolean!
+  created_at: Time!
+  updated_at: Time!
+}
+
+type UserMetadata {
+  default_business: UUID
+}

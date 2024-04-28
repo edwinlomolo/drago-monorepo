@@ -3,7 +3,9 @@ package repositories
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/edwinlomolo/drago-api/graph/model"
@@ -42,7 +44,7 @@ func (u *UserRepository) CreateUser(ctx context.Context, input model.NewUser) (*
 	}
 
 	// If user exists return it
-	existingUser, err := u.GetUser(ctx, args.Email)
+	existingUser, err := u.GetUserByEmail(ctx, args.Email)
 	if existingUser == nil && err == nil {
 		// Create and return new one if not
 		newUser, err := u.db.CreateUser(ctx, args)
@@ -52,9 +54,6 @@ func (u *UserRepository) CreateUser(ctx context.Context, input model.NewUser) (*
 
 		return &model.User{
 			ID:        newUser.ID,
-			Firstname: newUser.Firstname,
-			Lastname:  newUser.Lastname,
-			Email:     newUser.Email,
 			CreatedAt: newUser.CreatedAt,
 			UpdatedAt: newUser.UpdatedAt,
 		}, nil
@@ -63,19 +62,19 @@ func (u *UserRepository) CreateUser(ctx context.Context, input model.NewUser) (*
 	return existingUser, nil
 }
 
-func (u *UserRepository) GetUser(ctx context.Context, email string) (*model.User, error) {
-	user, err := u.db.GetUser(ctx, email)
+func (u *UserRepository) GetUserByEmail(ctx context.Context, email string) (*model.User, error) {
+	user, err := u.db.GetUserByEmail(ctx, email)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {
 		return nil, err
 	}
 
+	m := model.UserMetadata{}
+	json.Unmarshal(user.Metadata, &m)
+
 	return &model.User{
 		ID:        user.ID,
-		Firstname: user.Firstname,
-		Lastname:  user.Lastname,
-		Email:     user.Email,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}, nil
@@ -144,5 +143,43 @@ func (s *UserRepository) GetSession(ctx context.Context, userID uuid.NullUUID) (
 		UserID:    session.UserID.UUID,
 		CreatedAt: session.CreatedAt,
 		UpdatedAt: session.UpdatedAt,
+	}, nil
+}
+
+func (s *UserRepository) SetDefaultBusiness(ctx context.Context, userID, businessID uuid.UUID) (*model.User, error) {
+	arg := db.UpdateUserDefaultBusinessParams{
+		ID:         userID,
+		BusinessID: json.RawMessage(fmt.Sprintf("%q", businessID.String())),
+	}
+	user, err := s.db.UpdateUserDefaultBusiness(ctx, arg)
+	if err != nil {
+		return nil, err
+	}
+
+	m := model.UserMetadata{}
+	json.Unmarshal(user.Metadata, &m)
+
+	return &model.User{
+		ID:        user.ID,
+		Metadata:  &m,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}, nil
+}
+
+func (s *UserRepository) GetUserByID(ctx context.Context, userID uuid.UUID) (*model.User, error) {
+	user, err := s.db.GetUserByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	m := model.UserMetadata{}
+	json.Unmarshal(user.Metadata, &m)
+
+	return &model.User{
+		ID:        user.ID,
+		Metadata:  &m,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
 	}, nil
 }
