@@ -24,6 +24,11 @@ input NewTrip {
   business_id: UUID!
 }
 
+input SetDefaultUserBusiness {
+  userId: UUID!
+  businessId: UUID!
+}
+
 type Query {
   getBusinessBelongingToUser: [Business!]!
   getBusinessCouriers(id: UUID!): [Courier!]!
@@ -34,4 +39,6 @@ type Mutation {
   createBusiness(input: NewBusinessInput!): Business!
   addCourier(input: NewCourierInput!): Courier!
   createTrip(input: NewTrip!): Trip!
+  setUserDefaultBusiness(input: SetDefaultUserBusiness!): User!
+  getUser: User!
 }

@@ -115,4 +115,11 @@ func Test_BusinessController(t *testing.T) {
 		require.Nil(t, err)
 		assert.Equal(t, len(couriers), 1)
 	})
+
+	t.Run("set_default_user_business", func(t *testing.T) {
+		user, err := userController.SetDefaultBusiness(ctx, session.UserID, businessId)
+		require.Nil(t, err)
+		require.NotNil(t, user)
+		require.Equal(t, user.Metadata.DefaultBusiness, businessId)
+	})
 }

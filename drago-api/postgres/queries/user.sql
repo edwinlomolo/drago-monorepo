@@ -8,9 +8,13 @@ INSERT INTO users (
   $1, $2, $3
 ) RETURNING *;
 
--- name: GetUser :one
+-- name: GetUserByEmail :one
 SELECT * FROM users
 WHERE email = $1 LIMIT 1;
+
+-- name: GetUserByID :one
+SELECT * FROM users
+WHERE id = $1 LIMIT 1;
 
 -- name: CreateSession :one
 INSERT INTO sessions (
@@ -43,3 +47,8 @@ WHERE id IN (sqlc.arg(ids)::uuid[]);
 
 -- name: ClearTestSessions :execrows
 DELETE FROM sessions;
+
+-- name: UpdateUserDefaultBusiness :one
+UPDATE users
+SET metadata['default_business'] = sqlc.arg(business_id)
+WHERE id = $1 RETURNING *;

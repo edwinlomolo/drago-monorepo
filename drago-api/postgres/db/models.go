@@ -6,6 +6,7 @@ package db
 
 import (
 	"database/sql"
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -79,12 +80,13 @@ type Trip struct {
 }
 
 type User struct {
-	ID         uuid.UUID      `json:"id"`
-	Firstname  string         `json:"firstname"`
-	Lastname   string         `json:"lastname"`
-	Phone      sql.NullString `json:"phone"`
-	Email      string         `json:"email"`
-	Onboarding bool           `json:"onboarding"`
-	CreatedAt  time.Time      `json:"created_at"`
-	UpdatedAt  time.Time      `json:"updated_at"`
+	ID         uuid.UUID       `json:"id"`
+	Firstname  string          `json:"firstname"`
+	Lastname   string          `json:"lastname"`
+	Phone      sql.NullString  `json:"phone"`
+	Email      string          `json:"email"`
+	Onboarding bool            `json:"onboarding"`
+	Metadata   json.RawMessage `json:"metadata"`
+	CreatedAt  time.Time       `json:"created_at"`
+	UpdatedAt  time.Time       `json:"updated_at"`
 }

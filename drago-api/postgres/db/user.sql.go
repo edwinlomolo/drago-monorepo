@@ -8,6 +8,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/google/uuid"
 	"github.com/lib/pq"
@@ -88,7 +89,7 @@ INSERT INTO users (
   firstname, lastname, email
 ) VALUES (
   $1, $2, $3
-) RETURNING id, firstname, lastname, phone, email, onboarding, created_at, updated_at
+) RETURNING id, firstname, lastname, phone, email, onboarding, metadata, created_at, updated_at
 `
 
 type CreateUserParams struct {
@@ -107,6 +108,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Phone,
 		&i.Email,
 		&i.Onboarding,
+		&i.Metadata,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -176,13 +178,13 @@ func (q *Queries) GetSession(ctx context.Context, userID uuid.NullUUID) (Session
 	return i, err
 }
 
-const getUser = `-- name: GetUser :one
-SELECT id, firstname, lastname, phone, email, onboarding, created_at, updated_at FROM users
+const getUserByEmail = `-- name: GetUserByEmail :one
+SELECT id, firstname, lastname, phone, email, onboarding, metadata, created_at, updated_at FROM users
 WHERE email = $1 LIMIT 1
 `
 
-func (q *Queries) GetUser(ctx context.Context, email string) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUser, email)
+func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -191,6 +193,29 @@ func (q *Queries) GetUser(ctx context.Context, email string) (User, error) {
 		&i.Phone,
 		&i.Email,
 		&i.Onboarding,
+		&i.Metadata,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getUserByID = `-- name: GetUserByID :one
+SELECT id, firstname, lastname, phone, email, onboarding, metadata, created_at, updated_at FROM users
+WHERE id = $1 LIMIT 1
+`
+
+func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByID, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Firstname,
+		&i.Lastname,
+		&i.Phone,
+		&i.Email,
+		&i.Onboarding,
+		&i.Metadata,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -198,7 +223,7 @@ func (q *Queries) GetUser(ctx context.Context, email string) (User, error) {
 }
 
 const getUsersByID = `-- name: GetUsersByID :many
-SELECT id, firstname, lastname, phone, email, onboarding, created_at, updated_at FROM users
+SELECT id, firstname, lastname, phone, email, onboarding, metadata, created_at, updated_at FROM users
 WHERE id IN ($1::uuid[])
 `
 
@@ -218,6 +243,7 @@ func (q *Queries) GetUsersByID(ctx context.Context, ids []uuid.UUID) ([]User, er
 			&i.Phone,
 			&i.Email,
 			&i.Onboarding,
+			&i.Metadata,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -232,4 +258,32 @@ func (q *Queries) GetUsersByID(ctx context.Context, ids []uuid.UUID) ([]User, er
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateUserDefaultBusiness = `-- name: UpdateUserDefaultBusiness :one
+UPDATE users
+SET metadata['default_business'] = $2
+WHERE id = $1 RETURNING id, firstname, lastname, phone, email, onboarding, metadata, created_at, updated_at
+`
+
+type UpdateUserDefaultBusinessParams struct {
+	ID         uuid.UUID       `json:"id"`
+	BusinessID json.RawMessage `json:"business_id"`
+}
+
+func (q *Queries) UpdateUserDefaultBusiness(ctx context.Context, arg UpdateUserDefaultBusinessParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, updateUserDefaultBusiness, arg.ID, arg.BusinessID)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Firstname,
+		&i.Lastname,
+		&i.Phone,
+		&i.Email,
+		&i.Onboarding,
+		&i.Metadata,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }

@@ -19,11 +19,16 @@ type SignIn struct {
 }
 
 type User struct {
-	ID         uuid.UUID `json:"id"`
-	Firstname  string    `json:"firstname"`
-	Lastname   string    `json:"lastname"`
-	Email      string    `json:"email"`
-	Onboarding bool      `json:"onboarding"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
+	ID         uuid.UUID     `json:"id"`
+	Firstname  string        `json:"firstname"`
+	Lastname   string        `json:"lastname"`
+	Email      string        `json:"email"`
+	Metadata   *UserMetadata `json:"metadata"`
+	Onboarding bool          `json:"onboarding"`
+	CreatedAt  time.Time     `json:"created_at"`
+	UpdatedAt  time.Time     `json:"updated_at"`
+}
+
+type UserMetadata struct {
+	DefaultBusiness uuid.UUID `json:"default_business"`
 }
