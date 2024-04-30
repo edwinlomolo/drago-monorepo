@@ -4,6 +4,7 @@ import RootProvider from '@/providers/root'
 import Script from 'next/script'
 import Header from '@/components/Header'
 import { fontSans } from '@/app/fonts'
+import { Analytics } from '@vercel/analytics/react'
 import { cn } from '@/lib/utils'
 
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   description: "Logistic software tools for your business",
 };
 
-const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 
 export default function RootLayout({
   children,
@@ -49,6 +50,7 @@ export default function RootLayout({
             </div>
             <div className="grow">
               {children}
+              {isProduction && <Analytics />}
             </div>
             <div className="flex flex-row text-sm content-center md:justify-center justify-between items-center w-full">
               <p className="my-2 mx-4">&copy; {new Date().getFullYear()} &#x2022; Drago Technologies Ltd</p>
