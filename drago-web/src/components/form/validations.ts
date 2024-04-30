@@ -58,3 +58,8 @@ export const TripSchema = object().shape({
     .trim()
     .required("Courier required"),
 })
+
+export const getDateYYYYMMDD = (): string => {
+  const d = new Date()
+  return `${d.getFullYear()}-${("0"+(d.getMonth()+1)).slice(-2)}-${("0"+d.getDate()).slice(-2)}`
+}

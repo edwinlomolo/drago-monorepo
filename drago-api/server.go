@@ -26,6 +26,7 @@ func main() {
 	log := logger.New()
 	internal.NewJwtService(config.Configurations.Jwt)
 	internal.NewIpClient(internal.ClientOption{ApiKey: config.Configurations.Ipinfo.ApiKey})
+	internal.NewGcs()
 
 	// For some service activation
 	isProd := func() bool {
@@ -81,6 +82,7 @@ func main() {
 	r.Route("/api", func(r chi.Router) {
 		r.With(dragoMiddleware.Auth).Handle("/graphql", srv)
 		r.Post("/signin", dragoHandler.SignIn(userController))
+		r.Post("/business/upload/logo", dragoHandler.BusinessLogoUpload())
 	})
 	r.Get("/", playground.Handler("Graphql playground", "/api/graphql"))
 
