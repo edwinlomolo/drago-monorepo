@@ -6,6 +6,7 @@ export const GET_BUSINESS_BELONGING_TO_USER = gql`
       id
       name
       businessType
+      logo
     }
   }
 `

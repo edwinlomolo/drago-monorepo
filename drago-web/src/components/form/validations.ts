@@ -22,7 +22,7 @@ export const BusinessSchema = object().shape({
   businessType: string()
     .required("This is required"),
   hasInHouseLogistic: boolean().default(() => false),
-  logo: string().optional()
+  logo: string().required()
 })
 
 export const CourierSchema = object().shape({

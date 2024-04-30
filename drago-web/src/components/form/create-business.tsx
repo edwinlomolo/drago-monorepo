@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { BusinessSchema } from '@/components/form/validations'
@@ -44,6 +45,18 @@ const BusinessForm = () => {
     },
   })
   const { toast } = useToast()
+  const [uploadingFile, setUploadingFile] = useState(false)
+  const onFileUpload = (e: any) => {
+    const formData = new FormData()
+    formData.append('file', e.target.files[0])
+    setUploadingFile(true)
+    try {
+    } catch(e) {
+      console.error(`Error uploading file ${e}`)
+    } finally {
+      setUploadingFile(false)
+    }
+  }
 
   const onSubmit = (data: any) => {
     if (!creatingBusiness) {
@@ -138,6 +151,23 @@ const BusinessForm = () => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="logo"
+          control={methods.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Logo</FormLabel>
+              <FormControl>
+                <div className="flex items-center space-x-2 w-full">
+                  <Input type="file" {...field} onChange={onFileUpload} />
+                  {uploadingFile && <loaders.Submitting />}
+                </div>
+              </FormControl>
+              <FormDescription>Business logo</FormDescription>
               <FormMessage />
             </FormItem>
           )}
