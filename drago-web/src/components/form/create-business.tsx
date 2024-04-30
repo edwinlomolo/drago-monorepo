@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { BusinessSchema } from '@/components/form/validations'
+import { BusinessSchema, getDateYYYYMMDD } from '@/components/form/validations'
 import {
   Form,
   FormLabel,
@@ -19,6 +20,7 @@ import {
   SelectContent,
   SelectGroup,
 } from '@/components/ui/select'
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import useUserBusiness from '@/hooks/business-service'
@@ -43,9 +45,31 @@ const BusinessForm = () => {
       logo: "",
     },
   })
+  const businessLogo = methods.watch("logo")
   const { toast } = useToast()
+  const [uploadingFile, setUploadingFile] = useState(false)
+  const onFileUpload = async(e: any) => {
+    const formData = new FormData()
+    formData.append('file', e.target.files[0])
+    try {
+      setUploadingFile(true)
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_DRAGO_API}/business/upload/logo`,
+        {
+          method: "POST",
+          body: formData,
+        })
+      const data = await res.json()
+      methods.setValue("logo", data.imageUrl, { shouldValidate: true })
+    } catch(e) {
+      console.error(`Error uploading file ${e}`)
+    } finally {
+      setUploadingFile(false)
+    }
+  }
 
   const onSubmit = (data: any) => {
+    if (data.dateCreated.length === 0) data.dateCreated = getDateYYYYMMDD()
     if (!creatingBusiness) {
       createBusiness({
         variables: {
@@ -55,7 +79,7 @@ const BusinessForm = () => {
             dateCreated: new Date(data.dateCreated),
             hasInHouseLogistic: data.hasInHouseLogistic,
             businessType: data.businessType,
-            logo: "",
+            logo: data.logo,
           },
         },
         onCompleted: () => {
@@ -138,6 +162,28 @@ const BusinessForm = () => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="logo"
+          control={methods.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Logo</FormLabel>
+              <FormControl>
+                <div className="flex items-center space-x-2 w-full">
+                  {businessLogo.length === 0 && <Input type="file" {...field} onChange={onFileUpload} />}
+                  {businessLogo.length !== 0 && (
+                    <Avatar>
+                      <AvatarImage src={`${businessLogo}`} alt="business_logo" />
+                    </Avatar>
+                  )}
+                  {uploadingFile && <loaders.Submitting />}
+                </div>
+              </FormControl>
+              <FormDescription>Business logo</FormDescription>
               <FormMessage />
             </FormItem>
           )}

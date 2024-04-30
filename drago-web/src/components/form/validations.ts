@@ -22,7 +22,7 @@ export const BusinessSchema = object().shape({
   businessType: string()
     .required("This is required"),
   hasInHouseLogistic: boolean().default(() => false),
-  logo: string().optional()
+  logo: string().required()
 })
 
 export const CourierSchema = object().shape({
@@ -58,3 +58,8 @@ export const TripSchema = object().shape({
     .trim()
     .required("Courier required"),
 })
+
+export const getDateYYYYMMDD = (): string => {
+  const d = new Date()
+  return `${d.getFullYear()}-${("0"+(d.getMonth()+1)).slice(-2)}-${("0"+d.getDate()).slice(-2)}`
+}
