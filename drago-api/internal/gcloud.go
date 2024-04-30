@@ -25,6 +25,7 @@ type GCS interface {
 type gcsClient struct {
 	cStorage       *storage.Client
 	businessBucket string
+	baseObjectUri  string
 }
 
 func NewGcs() {
@@ -38,13 +39,15 @@ func NewGcs() {
 		log.WithError(err).Fatalln("new google cloud storage service")
 	}
 
-	gcs = &gcsClient{storage, config.Configurations.Google.GoogleCloudStorageBusinessDocumentsBucket}
+	gcs = &gcsClient{
+		cStorage:       storage,
+		businessBucket: config.Configurations.Google.GoogleCloudStorageBusinessDocumentsBucket,
+		baseObjectUri:  config.Configurations.Google.GoogleCloudObjectBaseUri,
+	}
 }
 
 func (gC gcsClient) UploadBusinessLogo(ctx context.Context, file multipart.File, fileHeader *multipart.FileHeader) (string, error) {
-	bucket := config.Configurations.Google.GoogleCloudStorageBusinessDocumentsBucket
-	objectUri := config.Configurations.Google.GoogleCloudObjectBaseUri
-	sw := gC.cStorage.Bucket(bucket).Object(fileHeader.Filename).NewWriter(ctx)
+	sw := gC.cStorage.Bucket(gC.businessBucket).Object(fileHeader.Filename).NewWriter(ctx)
 
 	if _, err := io.Copy(sw, file); err != nil {
 		return "", err
@@ -54,7 +57,7 @@ func (gC gcsClient) UploadBusinessLogo(ctx context.Context, file multipart.File,
 		return "", err
 	}
 
-	return fmt.Sprintf("%s/%s/%s", objectUri, bucket, fileHeader.Filename), nil
+	return fmt.Sprintf("%s/%s/%s", gC.baseObjectUri, gC.businessBucket, fileHeader.Filename), nil
 }
 
 func GetGcs() GCS {
