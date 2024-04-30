@@ -28,6 +28,7 @@ import { CourierSchema } from '@/components/form/validations'
 import { BusinessContext } from '@/providers/business-provider'
 import { Info } from 'lucide-react'
 import { loaders } from '@/components/Loader'
+import { useToast } from '@/components/ui/use-toast'
 
 const CreateCourierForm = () => {
   const {
@@ -47,6 +48,7 @@ const CreateCourierForm = () => {
       businessId: "",
     },
   })
+  const { toast } = useToast()
 
   const onSubmit = (data: any) => {
     if (!addingCourier && hasBusinessListing) {
@@ -61,6 +63,10 @@ const CreateCourierForm = () => {
         },
         onCompleted: () => {
           methods.reset()
+          toast({
+            title: "Success!",
+            description: "Courier created successfully.",
+          })
         },
         refetchQueries: [
           'GetBusinessCouriers',

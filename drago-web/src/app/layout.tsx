@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import { fontSans } from '@/app/fonts'
 import { Analytics } from '@vercel/analytics/react'
 import { cn } from '@/lib/utils'
+import { Toaster } from '@/components/ui/toaster'
 
 
 export const metadata: Metadata = {
@@ -51,6 +52,7 @@ export default function RootLayout({
             <div className="grow">
               {children}
               {isProduction && <Analytics />}
+              <Toaster />
             </div>
             <div className="flex flex-row text-sm content-center md:justify-center justify-between items-center w-full">
               <p className="my-2 mx-4">&copy; {new Date().getFullYear()} &#x2022; Drago Technologies Ltd</p>

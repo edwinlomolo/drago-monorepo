@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import useUserBusiness from '@/hooks/business-service'
 import { loaders } from '@/components/Loader'
+import { useToast } from '@/components/ui/use-toast'
 
 const options = [
   {value: "business", label: "Business - you sell goods"},
@@ -42,6 +43,7 @@ const BusinessForm = () => {
       logo: "",
     },
   })
+  const { toast } = useToast()
 
   const onSubmit = (data: any) => {
     if (!creatingBusiness) {
@@ -58,6 +60,10 @@ const BusinessForm = () => {
         },
         onCompleted: () => {
           methods.reset()
+          toast({
+            title: "Success!",
+            description: "Business created successfully.",
+          })
         },
         refetchQueries: [
           'GetBusinessBelongingToUser',

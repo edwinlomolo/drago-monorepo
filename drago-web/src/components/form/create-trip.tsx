@@ -30,6 +30,7 @@ import { userAvatarFallback } from '@/lib/utils'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { TripSchema } from '@/components/form/validations'
 import { Info } from 'lucide-react'
+import { useToast } from '@/components/ui/use-toast'
 
 const CreateTripForm = () => {
   const methods = useForm({
@@ -46,6 +47,7 @@ const CreateTripForm = () => {
   const map = useMap()
   const [pickupValue, setPickupValue] = useState(null)
   const [dropoffValue, setDropoffValue] = useState(null)
+  const { toast } = useToast()
 
   useEffect(() => {
     if (!placesLibrary || !map) return;
@@ -84,6 +86,10 @@ const CreateTripForm = () => {
           onCompleted: () => {
             setPickupValue(null)
             setDropoffValue(null)
+            toast({
+              title: "Success!",
+              description: "Trip dispatched to courier.",
+            })
           },
           refetchQueries: [
             'GetTripsBelongingToBusiness'
