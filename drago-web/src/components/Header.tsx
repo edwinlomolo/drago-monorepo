@@ -3,6 +3,7 @@
 import { useContext } from 'react'
 import { AppContext } from '@/providers/app-provider'
 import { BusinessContext } from '@/providers/business-provider'
+import { UserContext } from '@/providers/user-provider'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -28,6 +29,9 @@ import { Badge } from '@/components/ui/badge'
 import { signOut } from 'next-auth/react'
 import { userAvatarFallback } from '@/lib/utils'
 import Link from 'next/link'
+import { loaders } from '@/components/Loader'
+import { useMutation } from '@apollo/client'
+import { SET_USER_DEFAULT_BUSINESS } from '@/apollo/mutations/set-user-default-business'
 
 /*
 const links = [
@@ -38,8 +42,20 @@ const links = [
 
 function Header() {
   const { user, isAuthed, authLoading } = useContext(AppContext)
-  const { business, defaultBusiness, hasBusinessListing, setDefaultBusiness } = useContext(BusinessContext)
+  const { business, hasBusinessListing } = useContext(BusinessContext)
   const router = useRouter()
+  const { userInfo, userInfoLoading } = useContext(UserContext)
+  const [setDefaultBusiness, { loading: settingDefaultBusiness }] = useMutation(SET_USER_DEFAULT_BUSINESS)
+  const onBusinessSelect = (id: string) => {
+    if (!settingDefaultBusiness) {
+      setDefaultBusiness({
+        variables: {
+          businessId: id,
+        },
+        refetchQueries: ["GetUser"],
+      })
+    }
+  }
 
   return authLoading ? null : (
     <div className="flex flex-row border-b justify-between w-full">
@@ -52,17 +68,24 @@ function Header() {
         {!isAuthed && <Package className="h-8 w-8" />}
         {hasBusinessListing && (
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Avatar className="p-0.5">
-                <AvatarFallback>B</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
+            {(userInfoLoading || settingDefaultBusiness) && (
+              <div className="items-center flex">
+                <loaders.Submitting />
+              </div>
+            )}
+            {(!userInfoLoading && !settingDefaultBusiness) && (
+              <DropdownMenuTrigger>
+                <Avatar className="p-0.5">
+                  <AvatarFallback>B</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+            )}
             <DropdownMenuContent>
               <DropdownMenuLabel>You businesses</DropdownMenuLabel>
               <DropdownMenuGroup>
                 {business.map(item => (
-                  <DropdownMenuItem key={item.id} onSelect={() => setDefaultBusiness(item)}>
-                    {defaultBusiness?.id === item.id && <Check className="mr-2 h-4 w-4" />} {item.name}
+                  <DropdownMenuItem key={item.id} onSelect={() => onBusinessSelect(item.id)}>
+                    {userInfo?.metadata?.default_business === item.id && <Check className="mr-2 h-4 w-4" />} {item.name}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuGroup>
