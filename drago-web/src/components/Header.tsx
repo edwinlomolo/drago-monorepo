@@ -65,7 +65,11 @@ function Header() {
             <Package className="h-8 w-8" />
           </Button>
         )}
-        {!isAuthed && <Package className="h-8 w-8" />}
+        {!isAuthed && (
+          <Button variant="link" onClick={() => router.push("/")} size="icon">
+            <Package className="h-8 w-8" />
+          </Button>
+        )}
         {hasBusinessListing && (
           <DropdownMenu>
             {(userInfoLoading || settingDefaultBusiness) && (

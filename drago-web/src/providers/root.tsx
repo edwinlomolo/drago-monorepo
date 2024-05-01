@@ -14,11 +14,11 @@ const RootProvider = ({ children }: Props) => {
   return (
     <SessionProvider refetchWhenOffline={false} refetchOnWindowFocus={process.env.NODE_ENV === 'production'} refetchInterval={86400}>
       <AppProvider>
-        <BusinessProvider>
-          <UserProvider>
-            {children}
-          </UserProvider>
-        </BusinessProvider>
+        <UserProvider>
+          <BusinessProvider>
+              {children}
+          </BusinessProvider>
+        </UserProvider>
       </AppProvider>
     </SessionProvider>
   )
