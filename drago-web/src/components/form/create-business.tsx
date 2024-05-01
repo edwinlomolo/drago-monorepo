@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input'
 import useUserBusiness from '@/hooks/business-service'
 import { loaders } from '@/components/Loader'
 import { useToast } from '@/components/ui/use-toast'
+import { Trash2 } from 'lucide-react'
 
 const options = [
   {value: "business", label: "Business - you sell goods"},
@@ -67,6 +68,11 @@ const BusinessForm = () => {
       setUploadingFile(false)
     }
   }
+  const removeLogo = (e: any) => {
+    e.preventDefault()
+    methods.setValue("logo", "")
+  }
+
 
   const onSubmit = (data: any) => {
     if (data.dateCreated.length === 0) data.dateCreated = getDateYYYYMMDD()
@@ -176,9 +182,14 @@ const BusinessForm = () => {
                 <div className="flex items-center space-x-2 w-full">
                   {businessLogo.length === 0 && <Input type="file" {...field} onChange={onFileUpload} />}
                   {businessLogo.length !== 0 && (
-                    <Avatar>
-                      <AvatarImage src={`${businessLogo}`} alt="business_logo" />
-                    </Avatar>
+                    <div className="flex items-center flex-row gap-4">
+                      <Avatar>
+                        <AvatarImage src={`${businessLogo}`} alt="business_logo" />
+                      </Avatar>
+                      <Button size="icon" onClick={removeLogo} variant="destructive">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   )}
                   {uploadingFile && <loaders.Submitting />}
                 </div>
