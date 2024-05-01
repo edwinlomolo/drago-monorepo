@@ -46,6 +46,16 @@ function Header() {
   const router = useRouter()
   const { userInfo, userInfoLoading } = useContext(UserContext)
   const [setDefaultBusiness, { loading: settingDefaultBusiness }] = useMutation(SET_USER_DEFAULT_BUSINESS)
+  const onBusinessSelect = (id: string) => {
+    if (!settingDefaultBusiness) {
+      setDefaultBusiness({
+        variables: {
+          businessId: id,
+        },
+        refetchQueries: ["GetUser"],
+      })
+    }
+  }
 
   return authLoading ? null : (
     <div className="flex flex-row border-b justify-between w-full">
@@ -74,7 +84,7 @@ function Header() {
               <DropdownMenuLabel>You businesses</DropdownMenuLabel>
               <DropdownMenuGroup>
                 {business.map(item => (
-                  <DropdownMenuItem key={item.id} onSelect={() => setDefaultBusiness({variables: { businessId: item.id }, refetchQueries: ["GetUser"] })}>
+                  <DropdownMenuItem key={item.id} onSelect={() => onBusinessSelect(item.id)}>
                     {userInfo?.metadata?.default_business === item.id && <Check className="mr-2 h-4 w-4" />} {item.name}
                   </DropdownMenuItem>
                 ))}

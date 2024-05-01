@@ -29,9 +29,9 @@ const UserProvider = ({ children }: Props) => {
         userInfo: userInfo?.getUser,
         userInfoLoading,
       }}
-      >
+    >
       {children}
-      </UserContext.Provider>
+    </UserContext.Provider>
   )
 }
 
