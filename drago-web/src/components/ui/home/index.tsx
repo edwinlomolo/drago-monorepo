@@ -40,10 +40,11 @@ function LandingPage() {
             </div>
           </div>
           <div className="flex items-stretch w h-full w-full">
-            <div className="self-center mx-auto">
+            <div className="flex flex-col self-center mx-auto">
               <Button onClick={() => signIn("google", {callbackUrl: "/dashboard"})} variant="outline" className="gap-4 text-md font-semibold">
                 <FcGoogle size={32} /> Login with Google
               </Button>
+              <p className="mt-4 text-slate-600 text-sm">By signing-in, you agree to our <a className="underline" href="/privacy-policy">Privacy Policy</a>.</p>
             </div>
           </div>
         </>

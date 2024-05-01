@@ -57,6 +57,7 @@ export default function RootLayout({
             <div className="flex flex-row text-sm content-center md:justify-center justify-between items-center w-full">
               <p className="my-2 mx-4">&copy; {new Date().getFullYear()} &#x2022; Drago Technologies Ltd</p>
               <a className="mr-4 md:mr-0" href="mailto:lomoloedwin@gmail.com">Contact</a>
+              <a className="ml-2 mr-0.5 md:mr-0" href="/privacy-policy">Privacy</a>
             </div>
           </div>
         </RootProvider>
