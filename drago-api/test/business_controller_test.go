@@ -120,6 +120,6 @@ func Test_BusinessController(t *testing.T) {
 		user, err := userController.SetDefaultBusiness(ctx, session.UserID, businessId)
 		require.Nil(t, err)
 		require.NotNil(t, user)
-		require.Equal(t, user.Metadata.DefaultBusiness, businessId)
+		require.Equal(t, user.Metadata.DefaultBusiness, businessId, "business ids should match")
 	})
 }

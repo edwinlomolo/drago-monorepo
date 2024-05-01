@@ -72,19 +72,14 @@ func (r *mutationResolver) CreateTrip(ctx context.Context, input model.NewTrip) 
 }
 
 // SetUserDefaultBusiness is the resolver for the setUserDefaultBusiness field.
-func (r *mutationResolver) SetUserDefaultBusiness(ctx context.Context, input model.SetDefaultUserBusiness) (*model.User, error) {
-	return r.uc.SetDefaultBusiness(ctx, input.BusinessID, input.UserID)
-}
-
-// GetUser is the resolver for the getUser field.
-func (r *mutationResolver) GetUser(ctx context.Context) (*model.User, error) {
+func (r *mutationResolver) SetUserDefaultBusiness(ctx context.Context, businessID uuid.UUID) (*model.User, error) {
 	userId := ctx.Value("userId").(string)
 	uId, err := uuid.Parse(userId)
 	if err != nil {
 		return nil, err
 	}
 
-	return r.uc.GetUserByID(ctx, uId)
+	return r.uc.SetDefaultBusiness(ctx, uId, businessID)
 }
 
 // GetBusinessBelongingToUser is the resolver for the getBusinessBelongingToUser field.
@@ -106,6 +101,17 @@ func (r *queryResolver) GetBusinessCouriers(ctx context.Context, id uuid.UUID) (
 // GetBusinessDeliveryTrips is the resolver for the getBusinessDeliveryTrips field.
 func (r *queryResolver) GetTripsBelongingToBusiness(ctx context.Context, id uuid.UUID) ([]*model.Trip, error) {
 	return r.tc.GetTripsBelongingToBusiness(ctx, id)
+}
+
+// GetUser is the resolver for the getUser field.
+func (r *queryResolver) GetUser(ctx context.Context) (*model.User, error) {
+	userId := ctx.Value("userId").(string)
+	uId, err := uuid.Parse(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.uc.GetUserByID(ctx, uId)
 }
 
 // Mutation returns MutationResolver implementation.
