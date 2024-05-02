@@ -8,6 +8,11 @@ import (
 	"github.com/edwinlomolo/drago-api/internal"
 )
 
+var (
+	FileTooLargeErr  = errors.New("file: too large")
+	NoFileContentErr = errors.New("file: no file content")
+)
+
 func BusinessLogoUpload() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		uploader := internal.GetGcs()
@@ -15,12 +20,12 @@ func BusinessLogoUpload() http.HandlerFunc {
 
 		err := r.ParseMultipartForm(maxSize)
 		if err != nil {
-			http.Error(w, errors.New("FileTooLargeErr").Error(), http.StatusBadRequest)
+			http.Error(w, FileTooLargeErr.Error(), http.StatusBadRequest)
 		}
 
 		file, fileHeader, err := r.FormFile("file")
 		if err != nil {
-			http.Error(w, errors.New("NoFileUploadErr").Error(), http.StatusBadRequest)
+			http.Error(w, NoFileContentErr.Error(), http.StatusBadRequest)
 		}
 		defer file.Close()
 
