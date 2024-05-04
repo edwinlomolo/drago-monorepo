@@ -94,7 +94,7 @@ func (r *queryResolver) GetBusinessBelongingToUser(ctx context.Context) ([]*mode
 }
 
 // GetBusinessCouriers is the resolver for the getBusinessCouriers field.
-func (r *queryResolver) GetBusinessCouriers(ctx context.Context) ([]*model.Courier, error) {
+func (r *queryResolver) GetCouriersBelongingToBusiness(ctx context.Context) ([]*model.Courier, error) {
 	userId := ctx.Value("userId").(string)
 	uId, err := uuid.Parse(userId)
 	if err != nil {

@@ -89,10 +89,10 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetBusinessBelongingToUser  func(childComplexity int) int
-		GetBusinessCouriers         func(childComplexity int) int
-		GetTripsBelongingToBusiness func(childComplexity int) int
-		GetUser                     func(childComplexity int) int
+		GetBusinessBelongingToUser     func(childComplexity int) int
+		GetCouriersBelongingToBusiness func(childComplexity int) int
+		GetTripsBelongingToBusiness    func(childComplexity int) int
+		GetUser                        func(childComplexity int) int
 	}
 
 	Trip struct {
@@ -133,7 +133,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	GetBusinessBelongingToUser(ctx context.Context) ([]*model.Business, error)
-	GetBusinessCouriers(ctx context.Context) ([]*model.Courier, error)
+	GetCouriersBelongingToBusiness(ctx context.Context) ([]*model.Courier, error)
 	GetTripsBelongingToBusiness(ctx context.Context) ([]*model.Trip, error)
 	GetUser(ctx context.Context) (*model.User, error)
 }
@@ -369,12 +369,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetBusinessBelongingToUser(childComplexity), true
 
-	case "Query.getBusinessCouriers":
-		if e.complexity.Query.GetBusinessCouriers == nil {
+	case "Query.getCouriersBelongingToBusiness":
+		if e.complexity.Query.GetCouriersBelongingToBusiness == nil {
 			break
 		}
 
-		return e.complexity.Query.GetBusinessCouriers(childComplexity), true
+		return e.complexity.Query.GetCouriersBelongingToBusiness(childComplexity), true
 
 	case "Query.getTripsBelongingToBusiness":
 		if e.complexity.Query.GetTripsBelongingToBusiness == nil {
@@ -2120,8 +2120,8 @@ func (ec *executionContext) fieldContext_Query_getBusinessBelongingToUser(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_getBusinessCouriers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getBusinessCouriers(ctx, field)
+func (ec *executionContext) _Query_getCouriersBelongingToBusiness(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getCouriersBelongingToBusiness(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2134,7 +2134,7 @@ func (ec *executionContext) _Query_getBusinessCouriers(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetBusinessCouriers(rctx)
+		return ec.resolvers.Query().GetCouriersBelongingToBusiness(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2151,7 +2151,7 @@ func (ec *executionContext) _Query_getBusinessCouriers(ctx context.Context, fiel
 	return ec.marshalNCourier2ᚕᚖgithubᚗcomᚋedwinlomoloᚋdragoᚑapiᚋgraphᚋmodelᚐCourierᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_getBusinessCouriers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getCouriersBelongingToBusiness(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -5613,7 +5613,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getBusinessCouriers":
+		case "getCouriersBelongingToBusiness":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -5622,7 +5622,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_getBusinessCouriers(ctx, field)
+				res = ec._Query_getCouriersBelongingToBusiness(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
