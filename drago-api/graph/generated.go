@@ -90,8 +90,8 @@ type ComplexityRoot struct {
 
 	Query struct {
 		GetBusinessBelongingToUser  func(childComplexity int) int
-		GetBusinessCouriers         func(childComplexity int, id uuid.UUID) int
-		GetTripsBelongingToBusiness func(childComplexity int, id uuid.UUID) int
+		GetBusinessCouriers         func(childComplexity int) int
+		GetTripsBelongingToBusiness func(childComplexity int) int
 		GetUser                     func(childComplexity int) int
 	}
 
@@ -133,8 +133,8 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	GetBusinessBelongingToUser(ctx context.Context) ([]*model.Business, error)
-	GetBusinessCouriers(ctx context.Context, id uuid.UUID) ([]*model.Courier, error)
-	GetTripsBelongingToBusiness(ctx context.Context, id uuid.UUID) ([]*model.Trip, error)
+	GetBusinessCouriers(ctx context.Context) ([]*model.Courier, error)
+	GetTripsBelongingToBusiness(ctx context.Context) ([]*model.Trip, error)
 	GetUser(ctx context.Context) (*model.User, error)
 }
 type TripResolver interface {
@@ -374,24 +374,14 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		args, err := ec.field_Query_getBusinessCouriers_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetBusinessCouriers(childComplexity, args["id"].(uuid.UUID)), true
+		return e.complexity.Query.GetBusinessCouriers(childComplexity), true
 
 	case "Query.getTripsBelongingToBusiness":
 		if e.complexity.Query.GetTripsBelongingToBusiness == nil {
 			break
 		}
 
-		args, err := ec.field_Query_getTripsBelongingToBusiness_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetTripsBelongingToBusiness(childComplexity, args["id"].(uuid.UUID)), true
+		return e.complexity.Query.GetTripsBelongingToBusiness(childComplexity), true
 
 	case "Query.getUser":
 		if e.complexity.Query.GetUser == nil {
@@ -743,36 +733,6 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_getBusinessCouriers_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 uuid.UUID
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNUUID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_getTripsBelongingToBusiness_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 uuid.UUID
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNUUID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
 	return args, nil
 }
 
@@ -2174,7 +2134,7 @@ func (ec *executionContext) _Query_getBusinessCouriers(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetBusinessCouriers(rctx, fc.Args["id"].(uuid.UUID))
+		return ec.resolvers.Query().GetBusinessCouriers(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2223,17 +2183,6 @@ func (ec *executionContext) fieldContext_Query_getBusinessCouriers(ctx context.C
 			return nil, fmt.Errorf("no field named %q was found under type Courier", field.Name)
 		},
 	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getBusinessCouriers_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
 	return fc, nil
 }
 
@@ -2251,7 +2200,7 @@ func (ec *executionContext) _Query_getTripsBelongingToBusiness(ctx context.Conte
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetTripsBelongingToBusiness(rctx, fc.Args["id"].(uuid.UUID))
+		return ec.resolvers.Query().GetTripsBelongingToBusiness(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2301,17 +2250,6 @@ func (ec *executionContext) fieldContext_Query_getTripsBelongingToBusiness(ctx c
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Trip", field.Name)
 		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getTripsBelongingToBusiness_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
 	}
 	return fc, nil
 }

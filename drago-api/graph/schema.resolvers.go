@@ -94,13 +94,25 @@ func (r *queryResolver) GetBusinessBelongingToUser(ctx context.Context) ([]*mode
 }
 
 // GetBusinessCouriers is the resolver for the getBusinessCouriers field.
-func (r *queryResolver) GetBusinessCouriers(ctx context.Context, id uuid.UUID) ([]*model.Courier, error) {
-	return r.bc.GetBusinessCouriers(ctx, id)
+func (r *queryResolver) GetBusinessCouriers(ctx context.Context) ([]*model.Courier, error) {
+	userId := ctx.Value("userId").(string)
+	uId, err := uuid.Parse(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.bc.GetBusinessCouriers(ctx, uId)
 }
 
 // GetBusinessDeliveryTrips is the resolver for the getBusinessDeliveryTrips field.
-func (r *queryResolver) GetTripsBelongingToBusiness(ctx context.Context, id uuid.UUID) ([]*model.Trip, error) {
-	return r.tc.GetTripsBelongingToBusiness(ctx, id)
+func (r *queryResolver) GetTripsBelongingToBusiness(ctx context.Context) ([]*model.Trip, error) {
+	userId := ctx.Value("userId").(string)
+	uId, err := uuid.Parse(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.tc.GetTripsBelongingToBusiness(ctx, uId)
 }
 
 // GetUser is the resolver for the getUser field.

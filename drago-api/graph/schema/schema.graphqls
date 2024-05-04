@@ -26,8 +26,8 @@ input NewTrip {
 
 type Query {
   getBusinessBelongingToUser: [Business!]!
-  getBusinessCouriers(id: UUID!): [Courier!]!
-  getTripsBelongingToBusiness(id: UUID!): [Trip!]!
+  getBusinessCouriers: [Courier!]!
+  getTripsBelongingToBusiness: [Trip!]!
   getUser: User!
 }
 
