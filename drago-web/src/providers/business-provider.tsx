@@ -73,7 +73,7 @@ const BusinessProvider = ({ children }: Props) => {
         loadingBusinesses,
         defaultBusiness,
         setDefaultBusiness,
-        couriers: couriers?.getBusinessCouriers,
+        couriers: couriers?.getCouriersBelongingToBusiness,
         couriersLoading,
         addCourier: createCourier,
         addingCourier: creatingCourier,

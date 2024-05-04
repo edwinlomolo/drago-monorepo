@@ -110,8 +110,19 @@ func Test_BusinessController(t *testing.T) {
 		})
 	}
 
+	t.Run("return_0_couriers_for_user_with_0_business", func(t *testing.T) {
+		c, err := businessController.GetBusinessCouriers(ctx, session.UserID)
+		require.Equal(t, len(c), 0)
+		require.Nil(t, err)
+	})
+
 	t.Run("get_business_couriers", func(t *testing.T) {
-		couriers, err := businessController.GetBusinessCouriers(ctx, businessId)
+		// Set user default business
+		user, err := userController.SetDefaultBusiness(ctx, session.UserID, businessId)
+		require.Nil(t, err)
+		require.NotNil(t, user)
+
+		couriers, err := businessController.GetBusinessCouriers(ctx, session.UserID)
 		require.Nil(t, err)
 		assert.Equal(t, len(couriers), 1)
 	})

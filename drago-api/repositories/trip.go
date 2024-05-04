@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"math"
 
@@ -39,13 +40,25 @@ func (t *TripRepository) CreateTrip(ctx context.Context, input model.NewTripInpu
 	}, nil
 }
 
-func (t *TripRepository) GetTripsBelongingToBusiness(ctx context.Context, businessID uuid.UUID) ([]*model.Trip, error) {
-	var trips []*model.Trip
-	bT, err := t.db.GetTripsBelongingToBusiness(ctx, businessID)
+func (t *TripRepository) GetTripsBelongingToBusiness(ctx context.Context, userID uuid.UUID) ([]*model.Trip, error) {
+	user, err := t.db.GetUserByID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
 
+	if user.Metadata == nil {
+		return make([]*model.Trip, 0), nil
+	}
+
+	userMetadata := model.UserMetadata{}
+	json.Unmarshal(user.Metadata, &userMetadata)
+
+	bT, err := t.db.GetTripsBelongingToBusiness(ctx, userMetadata.DefaultBusiness)
+	if err != nil {
+		return nil, err
+	}
+
+	var trips []*model.Trip
 	for _, trip := range bT {
 		d := math.Round((trip.Distance).(float64))
 		t := &model.Trip{
