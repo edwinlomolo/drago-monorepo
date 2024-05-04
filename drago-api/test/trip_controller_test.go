@@ -78,8 +78,19 @@ func Test_TripController(t *testing.T) {
 		})
 	}
 
+	t.Run("return_0_trips_for_user_with_0_business", func(t *testing.T) {
+		trips, err := tripController.GetTripsBelongingToBusiness(ctx, session.UserID)
+		require.Nil(t, err)
+		require.Equal(t, len(trips), 0)
+	})
+
 	t.Run("get_trip_belonging_to_business", func(t *testing.T) {
-		trips, err := tripController.GetTripsBelongingToBusiness(ctx, business.ID)
+		// Set user default business
+		user, err := userController.SetDefaultBusiness(ctx, session.UserID, business.ID)
+		require.Nil(t, err)
+		require.NotNil(t, user)
+
+		trips, err := tripController.GetTripsBelongingToBusiness(ctx, session.UserID)
 		assert.Equal(t, len(trips), 2, "business created 2 trip(s)")
 		require.Nil(t, err)
 	})

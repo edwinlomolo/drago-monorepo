@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 
 	"github.com/edwinlomolo/drago-api/graph/model"
@@ -36,6 +37,22 @@ func (b *BusinessRepository) CreateBusiness(ctx context.Context, input model.New
 		return nil, err
 	}
 
+	// Set default user business if this is the first business created
+	user, err := b.db.GetUserByID(ctx, input.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	if user.Metadata == nil {
+		_, updateErr := b.db.UpdateUserDefaultBusiness(ctx, db.UpdateUserDefaultBusinessParams{
+			ID:         user.ID,
+			BusinessID: json.RawMessage(fmt.Sprintf("%q", business.ID.String())),
+		})
+		if updateErr != nil {
+			return nil, updateErr
+		}
+	}
+
 	return &model.Business{
 		ID:                 business.ID,
 		Name:               business.Name,
@@ -48,9 +65,9 @@ func (b *BusinessRepository) CreateBusiness(ctx context.Context, input model.New
 }
 
 // GetBusinessBelongingToUser - get businesss for user given user ID
-func (b *BusinessRepository) GetBusinessBelongingToUser(ctx context.Context, ID uuid.UUID) ([]*model.Business, error) {
+func (b *BusinessRepository) GetBusinessBelongingToUser(ctx context.Context, userID uuid.UUID) ([]*model.Business, error) {
 	var businesses []*model.Business
-	bs, err := b.db.GetBusinessBelongingToUser(ctx, ID)
+	bs, err := b.db.GetBusinessBelongingToUser(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -124,13 +141,26 @@ func (b *BusinessRepository) GetCourierByPhone(ctx context.Context, phone string
 }
 
 // Get business couriers
-func (b *BusinessRepository) GetBusinessCouriers(ctx context.Context, ID uuid.UUID) ([]*model.Courier, error) {
-	var couriers []*model.Courier
-	c, err := b.db.GetBusinessCouriers(ctx, ID)
+func (b *BusinessRepository) GetBusinessCouriers(ctx context.Context, userID uuid.UUID) ([]*model.Courier, error) {
+	// From default user business(currently selected)
+	user, err := b.db.GetUserByID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
 
+	if user.Metadata == nil {
+		return make([]*model.Courier, 0), nil
+	}
+
+	userMetadata := model.UserMetadata{}
+	json.Unmarshal(user.Metadata, &userMetadata)
+
+	c, err := b.db.GetBusinessCouriers(ctx, userMetadata.DefaultBusiness)
+	if err != nil {
+		return nil, err
+	}
+
+	var couriers []*model.Courier
 	for _, courier := range c {
 		cr := &model.Courier{
 			ID:        courier.ID,
