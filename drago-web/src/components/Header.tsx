@@ -52,7 +52,11 @@ function Header() {
         variables: {
           businessId: id,
         },
-        refetchQueries: ["GetUser"],
+        refetchQueries: [
+          "GetUser",
+          "GetCouriersBelongingToBusiness",
+          "GetTripsBelongingToBusiness",
+        ],
       })
     }
   }
