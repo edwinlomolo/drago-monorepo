@@ -5,11 +5,11 @@ import CreateTripForm from '@/components/form/create-trip'
 
 function Dashboard() {
   return (
-    <div className="flex flex-col w-full md:flex-row lg:flex-row h-full">
-      <div className="bg-white m-4 grow md:w-2/5">
+    <div className="grid md:grid-rows-2 lg:grid-cols-2">
+      <div className="m-4 flex-1 md:place-self-center md:w-3/4 my-auto">
         <CreateTripForm />
       </div>
-      <div className="hidden md:block lg:block grow md:w-3/5">
+      <div className="hidden flex-1 md:block lg:block">
         <Map />
       </div>
     </div>

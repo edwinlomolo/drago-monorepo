@@ -7,7 +7,7 @@ function MapContainer() {
   const { location } = useContext(AppContext)
 
   return (
-    <div className="h-full p-4">
+    <div className="grid h-full p-4">
       <Map
         defaultZoom={16}
         defaultCenter={location}
