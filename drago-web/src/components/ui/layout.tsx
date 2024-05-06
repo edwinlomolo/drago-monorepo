@@ -74,8 +74,9 @@ function RootLayout({ children }: Props) {
                 )}
                 {(!userInfoLoading && !settingDefaultBusiness) && (
                   <DropdownMenuTrigger>
-                    <Avatar className="p-0.5">
-                      <AvatarFallback>B</AvatarFallback>
+                    <Avatar className="m-1">
+                      <AvatarImage src={`${business.find(item => item.id === userInfo?.metadata?.default_business)?.logo}`} alt="logo" />
+                      <AvatarFallback delayMs={600}>B</AvatarFallback>
                     </Avatar>
                   </DropdownMenuTrigger>
                 )}
@@ -215,7 +216,7 @@ function RootLayout({ children }: Props) {
             )}
           </div>
         </header>
-        <main className={`grid items-start ${isAuthed ? `p-4 sm:px-6` : ``} sm:py-0 md:gap-8 flex-1 gap-4`}>
+        <main className={`grid h-80 items-start ${isAuthed ? `p-4 sm:px-6` : ``} sm:py-0 md:gap-8 flex-1 gap-4`}>
           {children}
         </main>
       </div>

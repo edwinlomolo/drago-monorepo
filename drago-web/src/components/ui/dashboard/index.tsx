@@ -6,7 +6,7 @@ import CreateTripForm from '@/components/form/create-trip'
 function Dashboard() {
   return (
     <div className="grid md:grid-rows-2 lg:grid-cols-2">
-      <div className="m-4 flex-1 md:place-self-center md:w-3/4 my-auto">
+      <div className="m-4 flex-1 md:place-self-center md:w-full my-auto">
         <CreateTripForm />
       </div>
       <div className="hidden flex-1 md:block lg:block">

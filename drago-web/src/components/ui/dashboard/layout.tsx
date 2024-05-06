@@ -13,7 +13,7 @@ function DashboardLayout({ children }: Props) {
   const { authLoading } = useContext(AppContext)
 
   return (
-    <div className="grid mg:grid-cols-2 h-full">
+    <div className="grid mg:grid-cols-2">
       {authLoading ? (
         <div className="content-center">
           <loaders.Preparing />
