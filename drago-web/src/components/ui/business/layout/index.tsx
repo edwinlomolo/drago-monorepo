@@ -12,7 +12,7 @@ const BusinessLayout = ({ children }: Props) => {
   const { authLoading } = useContext(AppContext)
 
   return (
-    <div className="grid mx-4 content-center h-full">
+    <div className="grid mx-4">
       {authLoading ? <loaders.Preparing /> : children}
     </div>
   )

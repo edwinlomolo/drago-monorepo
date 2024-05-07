@@ -77,7 +77,8 @@ const CreateCourierForm = () => {
 
   return (
     <Form {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4 md:min-w-[400px]">
+      <form onSubmit={methods.handleSubmit(onSubmit)} className="justify-self-center space-y-4">
+        <h2 className="text-3xl font-semibold">Onboard your courier</h2>
         {!hasBusinessListing && (
           <div className="flex flex-col flex-wrap items-center w-full">
             <Alert className="bg-yellow-100">

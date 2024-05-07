@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import RootProvider from '@/providers/root'
 import Script from 'next/script'
-import Header from '@/components/Header'
 import { fontSans } from '@/app/fonts'
 import { Analytics } from '@vercel/analytics/react'
 import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/toaster'
+import RootLayout from '@/components/ui/layout'
 
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 const isProduction = process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -45,21 +45,11 @@ export default function RootLayout({
         )}
       >
         <RootProvider>
-          <div className="flex flex-col h-dvh">
-            <div>
-              <Header />
-            </div>
-            <div className="grow">
-              {children}
-              {isProduction && <Analytics />}
-              <Toaster />
-            </div>
-            <div className="flex flex-row text-sm content-center md:justify-center justify-between items-center w-full">
-              <p className="my-2 mx-4">&copy; {new Date().getFullYear()} &#x2022; Drago Technologies Ltd</p>
-              <a className="mr-4 md:mr-0" href="mailto:lomoloedwin@gmail.com">Contact</a>
-              <a className="ml-2 mr-0.5 md:mr-0" href="/privacy-policy">Privacy</a>
-            </div>
-          </div>
+          <RootLayout>
+            {children}
+            {isProduction && <Analytics />}
+            <Toaster />
+          </RootLayout>
         </RootProvider>
       </body>
     </html>

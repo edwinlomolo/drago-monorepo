@@ -101,7 +101,7 @@ const CreateTripForm = () => {
 
   return (
     <Form {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
+      <form onSubmit={methods.handleSubmit(onSubmit)} className="border p-4">
         <h1 className="text-3xl mb-4 font-bold">Create trip</h1>
         <div className="space-y-8">
           <GooglePlacesAutocomplete
