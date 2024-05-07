@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Check, Plus, Store, UserPlus, /*Waypoints, Users*/ } from 'lucide-react'
+import { Check, Plus, Store, UserPlus, Route, Settings, Waypoints, Users, SquarePlus } from 'lucide-react'
 import { Home, Menu, LogOut, Package } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
@@ -76,7 +76,7 @@ function RootLayout({ children }: Props) {
                   <DropdownMenuTrigger>
                     <Avatar className="m-1">
                       <AvatarImage src={`${business.find(item => item.id === userInfo?.metadata?.default_business)?.logo}`} alt="logo" />
-                      <AvatarFallback delayMs={600}>B</AvatarFallback>
+                      <AvatarFallback delayMs={600}>{business.find(item => item.id === userInfo?.metadata?.default_business)?.name[0]}</AvatarFallback>
                     </Avatar>
                   </DropdownMenuTrigger>
                 )}
@@ -103,23 +103,75 @@ function RootLayout({ children }: Props) {
             )}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link
-                  href="/dashboard"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                <Button
+                  onClick={() => router.push("/dashboard")}
+                  className="border-0 cursor-pointer transition-colors md:h-8 md:w-8 h-9 w-9" size="icon" variant="link"
                 >
                   <Home className="h-5 w-5" />
-                  <span className="sr-only">Dashboard</span>
-                </Link>
+                </Button>
               </TooltipTrigger>
               <TooltipContent side="right">Dashboard</TooltipContent>
             </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="border-0 cursor-pointer transition-colors md:h-8 md:w-8 h-9 w-9" size="icon" variant="link"
+                >
+                  <Users className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">Couriers</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="border-0 cursor-pointer transition-colors md:h-8 md:w-8 h-9 w-9" size="icon" variant="link"
+                >
+                  <Waypoints className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">Trips</TooltipContent>
+            </Tooltip>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="link">
+                  <SquarePlus className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Business</DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onSelect={() => router.push("/business/create")}>
+                    <Store className="mr-2 h-4 w-4" />
+                    <span>New</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Courier</DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onSelect={() => router.push("/courier/create")}>
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    <span>Add</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuLabel>Trip</DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onSelect={() => {}}>
+                      <Route className="mr-2 h-4 w-4" />
+                      <span>Create</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
           <nav className="flex flex-col items-center px-2 sm:py-5 mt-auto gap-4">
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="rounded-full bg-yellow-600 size-4" />
+                <Button variant="link">
+                  <Settings className="h-5 w-5" />
+                </Button>
               </TooltipTrigger>
-              <TooltipContent side="right">Beta</TooltipContent>
+              <TooltipContent side="right">Settings</TooltipContent>
             </Tooltip>
           </nav>
         </aside>
@@ -132,6 +184,7 @@ function RootLayout({ children }: Props) {
                 <Package className="h-8 w-8" />
               </Button>
             )}
+            <Badge className="pointer-events-none font-extrabold h-4 bg-yellow-600">beta</Badge>
           </nav>
           <Sheet>
             <SheetTrigger asChild>
@@ -160,6 +213,18 @@ function RootLayout({ children }: Props) {
                 >
                   Dashboard
                 </Link>
+                <Link
+                  href="/dashboard"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Trips
+                </Link>
+                <Link
+                  href="/dashboard"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Couriers
+                </Link>
               </nav>
             </SheetContent>
           </Sheet>
@@ -185,6 +250,13 @@ function RootLayout({ children }: Props) {
                     <DropdownMenuItem onSelect={() => router.push("/courier/create")}>
                       <UserPlus className="mr-2 h-4 w-4" />
                       <span>Add</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuLabel>Trip</DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onSelect={() => {}}>
+                      <Route className="mr-2 h-4 w-4" />
+                      <span>Create</span>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>

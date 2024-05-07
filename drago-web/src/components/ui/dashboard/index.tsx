@@ -1,17 +1,23 @@
 'use client'
 
-import Map from '@/components/GoogleMap'
-import CreateTripForm from '@/components/form/create-trip'
+import { useContext } from 'react'
+import { AppContext } from '@/providers/app-provider'
+import { Map } from '@vis.gl/react-google-maps'
+import { mapStyle } from '@/theme/map-style'
 
 function Dashboard() {
+  const { location } = useContext(AppContext)
+
   return (
-    <div className="grid md:grid-rows-2 lg:grid-cols-2">
-      <div className="m-4 flex-1 md:place-self-center md:w-full my-auto">
-        <CreateTripForm />
-      </div>
-      <div className="hidden flex-1 md:block lg:block">
-        <Map />
-      </div>
+    <div>
+      <Map
+        style={{height: '80vh'}}
+        defaultZoom={16}
+        defaultCenter={location}
+        styles={mapStyle}
+        gestureHandling={'greedy'}
+        disableDefaultUI={true}
+      />
     </div>
   )
 }
