@@ -214,13 +214,13 @@ function RootLayout({ children }: Props) {
                   Dashboard
                 </Link>
                 <Link
-                  href="/dashboard"
+                  href="#"
                   className="text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Trips
                 </Link>
                 <Link
-                  href="/dashboard"
+                  href="#"
                   className="text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Couriers
