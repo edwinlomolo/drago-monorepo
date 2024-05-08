@@ -97,7 +97,9 @@ const Sidebar = ({business, onNavigate, settingDefaultBusiness, userInfo, userIn
         </Tooltip>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="link">
+            <Button
+              className="border-0 cursor-pointer transition-colors md:h-8 md:w-8 h-9 w-9" size="icon" variant="link"
+            >
               <SquarePlus className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
@@ -119,7 +121,7 @@ const Sidebar = ({business, onNavigate, settingDefaultBusiness, userInfo, userIn
             </DropdownMenuGroup>
             <DropdownMenuLabel>Trip</DropdownMenuLabel>
               <DropdownMenuGroup>
-                <DropdownMenuItem onSelect={() => {}}>
+                <DropdownMenuItem onSelect={() => onNavigate("/dashboard")}>
                   <Route className="mr-2 h-4 w-4" />
                   <span>Create</span>
                 </DropdownMenuItem>

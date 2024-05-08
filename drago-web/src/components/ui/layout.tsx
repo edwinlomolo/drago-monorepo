@@ -14,13 +14,6 @@ interface Props {
   children: React.ReactNode,
 }
 
-/*
-const links = [
-  {value: "/couriers", label: "Couriers", icon: <Users className="mr-2 h-4 w-4" />},
-  {value: "/trips", label: "Trips", icon: <Waypoints className="mr-2 h-4 w-4" />},
-]
- */
-
 function RootLayout({ children }: Props) {
   const { user, isAuthed, authLoading } = useContext(AppContext)
   const router = useRouter()
@@ -43,7 +36,7 @@ function RootLayout({ children }: Props) {
   }
 
   return authLoading ? null : (
-    <div className="flex flex-col min-h-screen w-full bg-muted/40">
+    <div className="min-h-screen grid grid-cols-1 w-full bg-muted/40">
       {isAuthed && (
         <Sidebar
           business={business}
@@ -55,9 +48,9 @@ function RootLayout({ children }: Props) {
           onNavigate={router.push}
         />
       )}
-      <div className={`flex flex-col sm:gap-4 ${isAuthed ? `sm:py-4 sm:pl-14` : ``}`}>
+      <div className={`${isAuthed ? `sm:py-4 sm:pl-14` : ``}`}>
         <Header isAuthed={isAuthed} user={user} onNavigate={router.push} />
-        <main className={`grid h-80 items-start ${isAuthed ? `p-4 sm:px-6` : ``} sm:py-0 md:gap-8 flex-1 gap-4`}>
+        <main className={`${isAuthed ? `sm:mx-4 sm:my-4` : ``}`}>
           {children}
         </main>
       </div>
