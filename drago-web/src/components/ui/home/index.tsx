@@ -37,7 +37,7 @@ function LandingPage() {
           </div>
           <div className="max-w-2xl">
             <div className="hidden sm:flex sm:mb-8 sm:justify-center">
-              <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-yellow-900/10 hover:ring-yellow-900/20">
+              <div className="relative px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-yellow-950/20 hover:ring-yellow-950/40">
                 We are in beta mode. You may experience breaking ui/ux changes
               </div>
             </div>
