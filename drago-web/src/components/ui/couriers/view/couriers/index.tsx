@@ -1,9 +1,5 @@
-const Couriers = () => {
-  return (
-    <div className="bg-red-900">
-      Couriers
-    </div>
-  )
-}
+import CouriersTable from '@/components/ui/couriers/CouriersTable'
+
+const Couriers = () => <CouriersTable />
 
 export default Couriers
