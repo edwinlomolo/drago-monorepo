@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useCallback, useEffect, useMemo, useState } from 'react'
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 import { BusinessContext } from '@/providers/business-provider'
 import {
@@ -55,11 +55,12 @@ const CreateTripForm = () => {
     setPlacesService((new placesLibrary.PlacesService(map) as any));
   }, [placesLibrary, map])
 
-  const dragMapCamera = (e: any) => {
-    ((placesService as any))?.getDetails({placeId: e.value.place_id, fields: ['geometry']}, (results: any, _: any) => {
+  const dragMapCamera = useCallback((e: any) => {
+    // TODO type this
+    (placesService as any).getDetails({placeId: e.value.place_id, fields: ['geometry']}, (results: any, _: any) => {
       map?.moveCamera({center: {lat: results.geometry.location.lat(), lng: results.geometry.location.lng()}, zoom: 16})
     })
-  }
+  }, [map, placesService])
 
   const onPickupSelect = (e: any) => {
     dragMapCamera(e)
