@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/select'
 import {
   Alert,
+  AlertTitle,
   AlertDescription,
 } from '@/components/ui/alert'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
@@ -155,7 +156,8 @@ const CreateTripForm = () => {
         ) : (
           <Alert className="bg-yellow-100 my-8">
             <Info className="mr-2 h-4 w-4" />
-            <AlertDescription>Onboard courier to assign</AlertDescription>
+            <AlertTitle>No couriers!</AlertTitle>
+            <AlertDescription>This business has not onboarded any courier(s)</AlertDescription>
           </Alert>
         )}
         <Button

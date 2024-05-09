@@ -6,6 +6,7 @@ export const GET_BUSINESS_COURIERS = gql`
       id
       firstname
       lastname
+      phone
     }
   }
 `
