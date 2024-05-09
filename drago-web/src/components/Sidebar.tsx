@@ -31,7 +31,7 @@ const Sidebar = ({business, onNavigate, settingDefaultBusiness, userInfo, userIn
         {hasBusinessListing && (
           <DropdownMenu>
             {(userInfoLoading || settingDefaultBusiness) && (
-              <div className="items-center flex">
+              <div className="m-1 items-center flex">
                 <loaders.Submitting />
               </div>
             )}
@@ -78,6 +78,7 @@ const Sidebar = ({business, onNavigate, settingDefaultBusiness, userInfo, userIn
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
+              onClick={() => onNavigate("/courier/view/couriers")}
               className="border-0 cursor-pointer transition-colors md:h-8 md:w-8 h-9 w-9" size="icon" variant="link"
             >
               <Users className="h-5 w-5" />

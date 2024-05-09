@@ -1,6 +1,6 @@
 const Couriers = () => {
   return (
-    <div>
+    <div className="bg-red-900">
       Couriers
     </div>
   )
