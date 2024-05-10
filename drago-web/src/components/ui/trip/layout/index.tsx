@@ -12,7 +12,7 @@ const TripLayout = ({ children }: Props) => {
   const { authLoading } = useContext(AppContext)
 
   return (
-    <div className="flex flex-col bg-white h-full">
+    <div className="grid mx-4">
       {authLoading ? <loaders.Preparing /> : children}
     </div>
   )

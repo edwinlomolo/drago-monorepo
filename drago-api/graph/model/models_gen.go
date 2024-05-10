@@ -38,6 +38,7 @@ type Query struct {
 type Trip struct {
 	ID             uuid.UUID  `json:"id"`
 	DropoffAddress string     `json:"dropoff_address"`
+	PickupAddress  string     `json:"pickup_address"`
 	Pickup         *Gps       `json:"pickup"`
 	Dropoff        *Gps       `json:"dropoff"`
 	Distance       string     `json:"distance"`

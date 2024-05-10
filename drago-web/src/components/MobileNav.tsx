@@ -36,7 +36,7 @@ const MobileNav = ({}: Props) => {
             Dashboard
           </Link>
           <Link
-            href="#"
+            href="/trip/view/trips"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
             Trips
