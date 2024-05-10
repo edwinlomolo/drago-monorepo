@@ -5,11 +5,22 @@ import { BusinessContext } from '@/providers/business-provider'
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTable } from '@/components/ui/data-table'
 import { loaders } from '@/components/Loader'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { userAvatarFallback } from '@/lib/utils'
 
 const columns: ColumnDef<any>[] = [
   {
     header: "Courier",
-    accessorFn: row => `${row.courier.firstname} ${row.courier.lastname}`
+    cell: ({ cell, row }) => {
+      return (
+        <div className="flex items-center gap-2">
+          <Avatar>
+            <AvatarFallback>{userAvatarFallback(row.original.courier.firstname, row.original.courier.lastname)}</AvatarFallback>
+          </Avatar>
+          {`${row.original.courier.firstname} ${row.original.courier.lastname}`}
+        </div>
+      )
+    },
   },
   {
     header: "Pickup",
