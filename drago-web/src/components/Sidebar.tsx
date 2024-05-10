@@ -12,6 +12,7 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Check, Home, Store, UserPlus, Route, Settings, Waypoints, Users, SquarePlus } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 
 interface Props {
   userInfo: any,
@@ -27,6 +28,7 @@ const Sidebar = ({business, onNavigate, settingDefaultBusiness, userInfo, userIn
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
       <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+        <Badge className="text-xs bg-yellow-600">beta</Badge>
         {hasBusinessListing && (
           <DropdownMenu>
             {(userInfoLoading || settingDefaultBusiness) && (
