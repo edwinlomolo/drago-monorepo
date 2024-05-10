@@ -1,4 +1,4 @@
-import TripLayout from '@/components/ui/trips/layout'
+import TripLayout from '@/components/ui/trip/layout'
 
 interface Props {
   children: React.ReactNode

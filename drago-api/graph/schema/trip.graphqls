@@ -1,6 +1,7 @@
 type Trip {
   id: UUID!
   dropoff_address: String!
+  pickup_address: String!
   pickup: Gps!
   dropoff: Gps!
   distance: String!

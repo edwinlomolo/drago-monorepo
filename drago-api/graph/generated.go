@@ -105,6 +105,7 @@ type ComplexityRoot struct {
 		DropoffAddress func(childComplexity int) int
 		ID             func(childComplexity int) int
 		Pickup         func(childComplexity int) int
+		PickupAddress  func(childComplexity int) int
 		Status         func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
 	}
@@ -452,6 +453,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Trip.Pickup(childComplexity), true
+
+	case "Trip.pickup_address":
+		if e.complexity.Trip.PickupAddress == nil {
+			break
+		}
+
+		return e.complexity.Trip.PickupAddress(childComplexity), true
 
 	case "Trip.status":
 		if e.complexity.Trip.Status == nil {
@@ -1945,6 +1953,8 @@ func (ec *executionContext) fieldContext_Mutation_createTrip(ctx context.Context
 				return ec.fieldContext_Trip_id(ctx, field)
 			case "dropoff_address":
 				return ec.fieldContext_Trip_dropoff_address(ctx, field)
+			case "pickup_address":
+				return ec.fieldContext_Trip_pickup_address(ctx, field)
 			case "pickup":
 				return ec.fieldContext_Trip_pickup(ctx, field)
 			case "dropoff":
@@ -2229,6 +2239,8 @@ func (ec *executionContext) fieldContext_Query_getTripsBelongingToBusiness(ctx c
 				return ec.fieldContext_Trip_id(ctx, field)
 			case "dropoff_address":
 				return ec.fieldContext_Trip_dropoff_address(ctx, field)
+			case "pickup_address":
+				return ec.fieldContext_Trip_pickup_address(ctx, field)
 			case "pickup":
 				return ec.fieldContext_Trip_pickup(ctx, field)
 			case "dropoff":
@@ -2521,6 +2533,50 @@ func (ec *executionContext) _Trip_dropoff_address(ctx context.Context, field gra
 }
 
 func (ec *executionContext) fieldContext_Trip_dropoff_address(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Trip",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Trip_pickup_address(ctx context.Context, field graphql.CollectedField, obj *model.Trip) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Trip_pickup_address(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PickupAddress, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Trip_pickup_address(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Trip",
 		Field:      field,
@@ -5728,6 +5784,11 @@ func (ec *executionContext) _Trip(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "dropoff_address":
 			out.Values[i] = ec._Trip_dropoff_address(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "pickup_address":
+			out.Values[i] = ec._Trip_pickup_address(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

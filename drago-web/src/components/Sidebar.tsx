@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { loaders } from '@/components/Loader'
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 import {
@@ -12,7 +11,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Check, Home, Package, Store, UserPlus, Route, Settings, Waypoints, Users, SquarePlus } from 'lucide-react'
+import { Check, Home, Store, UserPlus, Route, Settings, Waypoints, Users, SquarePlus } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 
 interface Props {
   userInfo: any,
@@ -28,10 +28,11 @@ const Sidebar = ({business, onNavigate, settingDefaultBusiness, userInfo, userIn
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
       <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+        <Badge className="text-xs bg-yellow-600">beta</Badge>
         {hasBusinessListing && (
           <DropdownMenu>
             {(userInfoLoading || settingDefaultBusiness) && (
-              <div className="m-1 items-center flex">
+              <div className="m-1 items-center rounded-full bg-slate-100 p-3 flex">
                 <loaders.Submitting />
               </div>
             )}
@@ -54,15 +55,6 @@ const Sidebar = ({business, onNavigate, settingDefaultBusiness, userInfo, userIn
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-        )}
-        {!hasBusinessListing && (
-          <Link
-            href="/dashboard"
-            className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
-          >
-            <Package className="h-4 w-4 transition-all group-hover:scale-110" />
-            <span className="sr-only">Drago</span>
-          </Link>
         )}
         <Tooltip>
           <TooltipTrigger asChild>
@@ -89,6 +81,7 @@ const Sidebar = ({business, onNavigate, settingDefaultBusiness, userInfo, userIn
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
+              onClick={() => onNavigate("/trip/view/trips")}
               className="border-0 cursor-pointer transition-colors md:h-8 md:w-8 h-9 w-9" size="icon" variant="link"
             >
               <Waypoints className="h-5 w-5" />

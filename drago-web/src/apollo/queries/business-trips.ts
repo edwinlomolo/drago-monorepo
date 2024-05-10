@@ -11,6 +11,8 @@ export const GET_BUSINESS_TRIPS = gql`
         phone
       }
       status
+      pickup_address
+      dropoff_address
       distance
     }
   }

@@ -65,6 +65,7 @@ func (t *TripRepository) GetTripsBelongingToBusiness(ctx context.Context, userID
 			ID:             trip.ID,
 			Status:         model.TripStatus(trip.Status),
 			DropoffAddress: trip.DropoffAddress,
+			PickupAddress:  trip.PickupAddress,
 			Pickup:         model.ParsePostgisLocation(trip.Pickup),
 			Distance:       toKM(d),
 			Dropoff:        model.ParsePostgisLocation(trip.Dropoff),
