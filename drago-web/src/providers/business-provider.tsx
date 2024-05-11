@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useContext, Dispatch, SetStateAction } from 'react'
+import { useContext } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import { GET_BUSINESS_COURIERS } from '@/apollo/queries/business-couriers'
 import { GET_BUSINESS_TRIPS } from '@/apollo/queries/business-trips'
@@ -9,13 +9,12 @@ import { ADD_COURIER } from '@/apollo/mutations/create-courier'
 import { createContext } from 'react'
 import useUserBusiness from '@/hooks/business-service'
 import { AppContext } from '@/providers/app-provider'
+import { UserContext } from '@/providers/user-provider'
 
 interface IBusinessContext {
   business: any[]
   hasBusinessListing: boolean
   loadingBusinesses: boolean
-  defaultBusiness: any
-  setDefaultBusiness: Dispatch<SetStateAction<any>>
   couriers: any[]
   couriersLoading: boolean
   addCourier: (input: any) => void
@@ -34,8 +33,6 @@ export const BusinessContext = createContext<IBusinessContext>({
   business: [],
   hasBusinessListing: false,
   loadingBusinesses: false,
-  defaultBusiness: undefined,
-  setDefaultBusiness: () => {},
   couriers: [],
   couriersLoading: false,
   addCourier: () => {},
@@ -48,22 +45,18 @@ export const BusinessContext = createContext<IBusinessContext>({
 
 const BusinessProvider = ({ children }: Props) => {
   const { isAuthed } = useContext(AppContext)
-  const [defaultBusiness, setDefaultBusiness] = useState(null)
+  const { userInfo } = useContext(UserContext)
   const { business, loadingBusinesses, hasBusinessListing } = useUserBusiness()
   const { data: couriers, loading: couriersLoading } = useQuery(GET_BUSINESS_COURIERS, {
-    variables: { id: (defaultBusiness as any)?.id ?? "" },
-    skip: !(defaultBusiness as any)?.id || !isAuthed,
+    variables: { id: userInfo?.metadata.default_business ?? "" },
+    skip: !userInfo?.metadata.default_business || !isAuthed,
   })
   const [createCourier, { loading: creatingCourier }] = useMutation(ADD_COURIER)
   const [createTrip, { loading: creatingTrip }] = useMutation(CREATE_TRIP)
   const { data: businessTrips, loading: gettingBusinessTrips } = useQuery(GET_BUSINESS_TRIPS, {
-    variables: { id: (defaultBusiness as any)?.id ?? "" },
-    skip: !(defaultBusiness as any)?.id || !isAuthed,
+    variables: { id: userInfo?.metadata.default_business ?? "" },
+    skip: !userInfo?.metadata.default_business || !isAuthed,
   })
-
-  useEffect(() => {
-    if (hasBusinessListing) setDefaultBusiness(business[0])
-  }, [business, hasBusinessListing])
 
   return (
     <BusinessContext.Provider
@@ -71,8 +64,6 @@ const BusinessProvider = ({ children }: Props) => {
         business,
         hasBusinessListing,
         loadingBusinesses,
-        defaultBusiness,
-        setDefaultBusiness,
         couriers: couriers?.getCouriersBelongingToBusiness,
         couriersLoading,
         addCourier: createCourier,

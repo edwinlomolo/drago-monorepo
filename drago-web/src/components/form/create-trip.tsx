@@ -1,4 +1,4 @@
-import { useContext, useCallback, useEffect, useMemo, useState } from 'react'
+import { useContext, useCallback, useMemo } from 'react'
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 import { BusinessContext } from '@/providers/business-provider'
 import {
@@ -24,7 +24,6 @@ import {
 } from '@/components/ui/alert'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { useForm } from 'react-hook-form'
-import { useMapsLibrary, useMap } from '@vis.gl/react-google-maps'
 import { Button } from '@nextui-org/react'
 import { loaders } from '@/components/Loader'
 import { userAvatarFallback } from '@/lib/utils'
@@ -32,6 +31,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { TripSchema } from '@/components/form/validations'
 import { Info } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
+import { TripContext } from '@/providers/trip-provider'
+import { UserContext } from '@/providers/user-provider'
 
 const CreateTripForm = () => {
   const methods = useForm({
@@ -40,54 +41,45 @@ const CreateTripForm = () => {
       courierId: ""
     },
   })
-  const { couriers, defaultBusiness, createTrip, creatingTrip } = useContext(BusinessContext)
+  const { couriers, createTrip, creatingTrip } = useContext(BusinessContext)
+  const { userInfo } = useContext(UserContext)
   const hasCouriers = useMemo(() => (couriers || []).length > 0, [couriers])
   const courierOptions = useMemo(() => (couriers || []).map(item => ({firstname: item.firstname, lastname: item.lastname, label: `${item.firstname} ${item.lastname}`, value: item.id})), [couriers])
-  const [placesService, setPlacesService] = useState(null)
-  const placesLibrary = useMapsLibrary('places')
-  const map = useMap()
-  const [pickupValue, setPickupValue] = useState(null)
-  const [dropoffValue, setDropoffValue] = useState(null)
   const { toast } = useToast()
-
-  useEffect(() => {
-    if (!placesLibrary || !map) return;
-
-    setPlacesService((new placesLibrary.PlacesService(map) as any));
-  }, [placesLibrary, map])
+  const { pickup, setPickup, map, placesService, dropoff, setDropoff } = useContext(TripContext)
 
   const dragMapCamera = useCallback((e: any) => {
     // TODO type this
     (placesService as any).getDetails({placeId: e.value.place_id, fields: ['geometry']}, (results: any, _: any) => {
-      map?.moveCamera({center: {lat: results.geometry.location.lat(), lng: results.geometry.location.lng()}, zoom: 16})
+      map?.moveCamera({center: {lat: results.geometry.location.lat(), lng: results.geometry.location.lng()}, zoom: 15})
     })
   }, [map, placesService])
 
   const onPickupSelect = (e: any) => {
     dragMapCamera(e)
-    setPickupValue(e)
+    setPickup(e)
   }
 
   const onDropoffSelect = (e: any) => {
     dragMapCamera(e)
-    setDropoffValue(e)
+    setDropoff(e)
   }
 
   const onSubmit = (data: any) => {
     if (!creatingTrip) {
-      if (!!pickupValue && !!dropoffValue) {
+      if (!!pickup && !!dropoff) {
         createTrip({
           variables: {
             input: {
-              pickup: ((pickupValue as any))?.value?.place_id,
-              dropoff: ((dropoffValue as any))?.value?.place_id,
-              business_id: defaultBusiness?.id,
+              pickup: pickup?.value.place_id,
+              dropoff: dropoff?.value.place_id,
+              business_id: userInfo?.metadata.default_business,
               courier_id: data.courierId,
             },
           },
           onCompleted: () => {
-            setPickupValue(null)
-            setDropoffValue(null)
+            setPickup(null)
+            setDropoff(null)
             toast({
               title: "Success!",
               description: "Trip dispatched to courier.",
@@ -108,14 +100,14 @@ const CreateTripForm = () => {
         <div className="space-y-8">
           <GooglePlacesAutocomplete
             selectProps={{
-              value: pickupValue,
+              value: pickup,
               onChange: onPickupSelect,
               placeholder: "Pickup location",
             }}
           />
           <GooglePlacesAutocomplete
             selectProps={{
-              value: dropoffValue,
+              value: dropoff,
               onChange: onDropoffSelect,
               placeholder: "Drop-off location",
             }}
