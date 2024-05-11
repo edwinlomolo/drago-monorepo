@@ -47,7 +47,7 @@ function Dashboard() {
         </div>
         <Map
           style={{height: '80vh'}}
-          defaultZoom={16}
+          defaultZoom={15}
           defaultCenter={location}
           styles={mapStyle}
           gestureHandling={'greedy'}
