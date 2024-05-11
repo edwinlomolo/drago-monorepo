@@ -32,6 +32,7 @@ import { TripSchema } from '@/components/form/validations'
 import { Info } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
 import { TripContext } from '@/providers/trip-provider'
+import { UserContext } from '@/providers/user-provider'
 
 const CreateTripForm = () => {
   const methods = useForm({
@@ -40,7 +41,8 @@ const CreateTripForm = () => {
       courierId: ""
     },
   })
-  const { couriers, defaultBusiness, createTrip, creatingTrip } = useContext(BusinessContext)
+  const { couriers, createTrip, creatingTrip } = useContext(BusinessContext)
+  const { userInfo } = useContext(UserContext)
   const hasCouriers = useMemo(() => (couriers || []).length > 0, [couriers])
   const courierOptions = useMemo(() => (couriers || []).map(item => ({firstname: item.firstname, lastname: item.lastname, label: `${item.firstname} ${item.lastname}`, value: item.id})), [couriers])
   const { toast } = useToast()
@@ -69,9 +71,9 @@ const CreateTripForm = () => {
         createTrip({
           variables: {
             input: {
-              pickup: pickup?.value?.place_id,
-              dropoff: dropoff?.value?.place_id,
-              business_id: defaultBusiness?.id,
+              pickup: pickup?.value.place_id,
+              dropoff: dropoff?.value.place_id,
+              business_id: userInfo?.metadata.default_business,
               courier_id: data.courierId,
             },
           },
