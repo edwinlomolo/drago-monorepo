@@ -89,9 +89,9 @@ const TripProvider = ({ children }: Props) => {
         placesService,
         map,
       }}
-      >
-        {children}
-      </TripContext.Provider>
+    >
+      {children}
+    </TripContext.Provider>
   )
 }
 
