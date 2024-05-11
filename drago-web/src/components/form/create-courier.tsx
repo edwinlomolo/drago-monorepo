@@ -29,15 +29,16 @@ import { BusinessContext } from '@/providers/business-provider'
 import { Info } from 'lucide-react'
 import { loaders } from '@/components/Loader'
 import { useToast } from '@/components/ui/use-toast'
+import { UserContext } from '@/providers/user-provider'
 
 const CreateCourierForm = () => {
   const {
     business,
-    defaultBusiness,
     addCourier,
     addingCourier,
     hasBusinessListing,
   } = useContext(BusinessContext)
+  const { userInfo } = useContext(UserContext)
   const businesses = useMemo(() => (business || []).map(item => ({label: item.name, value: item.id})), [business])
   const methods = useForm({
     resolver: yupResolver(CourierSchema),
@@ -58,7 +59,7 @@ const CreateCourierForm = () => {
             firstname: data.firstname,
             lastname: data.lastname,
             phone: data.phone,
-            business_id: defaultBusiness?.id,
+            business_id: userInfo?.metadata.default_business,
           },
         },
         onCompleted: () => {
