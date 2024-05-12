@@ -13,7 +13,7 @@ interface Props {
 
 const RootProvider = ({ children }: Props) => {
   return (
-    <SessionProvider refetchWhenOffline={false} refetchOnWindowFocus={process.env.NODE_ENV === 'production'} refetchInterval={86400}>
+    <SessionProvider refetchWhenOffline={false} refetchInterval={86400}>
       <AppProvider>
         <UserProvider>
           <BusinessProvider>
