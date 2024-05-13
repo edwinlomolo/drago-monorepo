@@ -8,7 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
 import com.lomolo.courier.navigation.Navigation
 
@@ -27,7 +26,7 @@ fun HomeScreen(
         ))
     }
     val mapProperties by remember {
-        mutableStateOf(MapProperties(mapType = MapType.TERRAIN))
+        mutableStateOf(MapProperties())
     }
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
