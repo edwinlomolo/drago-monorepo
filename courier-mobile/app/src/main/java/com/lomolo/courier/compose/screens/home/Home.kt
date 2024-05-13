@@ -22,12 +22,12 @@ object HomeScreenRoute: Navigation {
 fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
-    var uiSettings by remember {
+    val uiSettings by remember {
         mutableStateOf(MapUiSettings(
             zoomControlsEnabled = false
         ))
     }
-    var mapProperties by remember {
+    val mapProperties by remember {
         mutableStateOf(MapProperties(mapType = MapType.TERRAIN))
     }
     GoogleMap(
