@@ -1,8 +1,16 @@
 package com.lomolo.courier.compose.screens.home
 
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
 import com.lomolo.courier.navigation.Navigation
 
 object HomeScreenRoute: Navigation {
@@ -14,5 +22,17 @@ object HomeScreenRoute: Navigation {
 fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
-    Text(text = "Welcome")
+    var uiSettings by remember {
+        mutableStateOf(MapUiSettings(
+            zoomControlsEnabled = false
+        ))
+    }
+    var mapProperties by remember {
+        mutableStateOf(MapProperties(mapType = MapType.TERRAIN))
+    }
+    GoogleMap(
+        modifier = Modifier.fillMaxSize(),
+        uiSettings = uiSettings,
+        properties = mapProperties,
+    )
 }
