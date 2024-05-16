@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
 
             val lifecycleOwner = LocalLifecycleOwner.current
             DisposableEffect(key1 = hasLocationPermissions, key2 = lifecycleOwner) {
-               val locationRequest = LocationRequest.Builder(locationPriority, TimeUnit.SECONDS.toMillis(3)).build()
+                val locationRequest = LocationRequest.Builder(locationPriority, TimeUnit.SECONDS.toMillis(3)).build()
                 val locationCallback: LocationCallback = object: LocationCallback() {
                     override fun onLocationResult(p0: LocationResult) {
                         for(location in p0.locations) {
