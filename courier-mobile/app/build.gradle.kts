@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
+    implementation (libs.play.services.location)
     testImplementation(libs.junit)
     testImplementation(libs.androidx.room.testing)
     androidTestImplementation(libs.androidx.navigation.testing)

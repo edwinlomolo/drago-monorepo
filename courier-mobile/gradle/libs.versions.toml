@@ -15,6 +15,7 @@ mapsCompose = "4.4.1"
 moshiKotlin = "1.13.0"
 navVersion = "2.7.7"
 okhttpBom = "4.11.0"
+playServicesLocation = "21.2.0"
 playServicesMaps = "18.2.0"
 roomCompiler = "2.6.1"
 roomKtx = "2.6.1"
@@ -58,6 +59,7 @@ navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx" }
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 okhttp = { module = "com.squareup.okhttp3:okhttp" }
 okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttpBom" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
 
