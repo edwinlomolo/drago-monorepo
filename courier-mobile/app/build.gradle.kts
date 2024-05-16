@@ -79,7 +79,6 @@ dependencies {
     implementation (libs.play.services.location)
     testImplementation(libs.junit)
     testImplementation(libs.androidx.room.testing)
-    androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

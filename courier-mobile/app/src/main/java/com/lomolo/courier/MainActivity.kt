@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
             }
-            shouldRedirectToUserLocationSettings = (!shouldShowPermissionRationale && !hasLocationPermissions).also { if(it) locationServices.openApplicationSettings(this) }
+            shouldRedirectToUserLocationSettings = !shouldShowPermissionRationale && !hasLocationPermissions
 
             val lifecycleOwner = LocalLifecycleOwner.current
             DisposableEffect(key1 = hasLocationPermissions, key2 = lifecycleOwner) {
