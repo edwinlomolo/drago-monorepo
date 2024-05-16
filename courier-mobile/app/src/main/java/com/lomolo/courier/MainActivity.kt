@@ -120,7 +120,12 @@ class MainActivity : ComponentActivity() {
                         AlertDialog(
                             onDismissRequest = { return@AlertDialog },
                             confirmButton = {
-                                Button(onClick = { /*TODO*/ }) {
+                                Button(
+                                    onClick = {
+                                        shouldShowPermissionRationale = false
+                                        locationPermissionLauncher.launch(locationServices.permissions)
+                                    }
+                                ) {
                                    Text(
                                        text = "Retry",
                                        style = MaterialTheme.typography.labelSmall,
