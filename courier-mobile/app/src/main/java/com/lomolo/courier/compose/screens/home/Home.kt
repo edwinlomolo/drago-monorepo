@@ -39,7 +39,7 @@ fun HomeScreen(
         position = CameraPosition.fromLatLngZoom(deviceGps, 16f)
     }
     if (mapLoaded) {
-        LaunchedEffect(deviceGps.latitude != 0.0, deviceGps.longitude != 0.0) {
+        LaunchedEffect(deviceGps.latitude, deviceGps.longitude) {
             cameraPositionState.position = CameraPosition.fromLatLngZoom(deviceGps, 16f)
         }
     }
