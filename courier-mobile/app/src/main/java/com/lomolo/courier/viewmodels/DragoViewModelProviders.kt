@@ -2,10 +2,18 @@ package com.lomolo.courier.viewmodels
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.lomolo.courier.DragoApp
+import com.lomolo.courier.MainViewModel
 
 /* Drago view model root provider */
 object DragoViewModelProviders {
+    val Factory = viewModelFactory {
+        initializer {
+            MainViewModel()
+        }
+    }
 }
 
 /* Instance of drago app */
