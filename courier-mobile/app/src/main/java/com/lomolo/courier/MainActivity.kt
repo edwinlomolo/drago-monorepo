@@ -42,7 +42,7 @@ import com.lomolo.courier.viewmodels.DragoViewModelProviders
 import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
-    lateinit var locationServices: LocationPermission
+    private lateinit var locationServices: LocationPermission
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var locationPriority: Int = Priority.PRIORITY_HIGH_ACCURACY
     private val mainViewModel: MainViewModel by viewModels { DragoViewModelProviders.Factory }

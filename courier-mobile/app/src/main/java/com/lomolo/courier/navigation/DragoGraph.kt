@@ -29,7 +29,6 @@ fun DragoNavHost(
     mainViewModel: MainViewModel = viewModel(factory = DragoViewModelProviders.Factory),
 ) {
     val deviceDetails by mainViewModel.deviceDetailsUiState.collectAsState()
-    val deviceGps = deviceDetails.gps
 
     NavHost(
         navController = navHostController,
@@ -42,7 +41,9 @@ fun DragoNavHost(
                         .padding(innerPadding)
                 ) {
                     HomeScreen(
-                        deviceGps = deviceGps
+                        deviceGps = deviceDetails.gps,
+                        onMaploaded = { mainViewModel.setMaploaded(it) },
+                        mapLoaded = deviceDetails.mapLoaded,
                     )
                 }
             }

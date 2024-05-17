@@ -15,8 +15,15 @@ class MainViewModel: ViewModel() {
             it.copy(gps = gps)
         }
     }
+
+    fun setMaploaded(v: Boolean) {
+        _deviceDetails.update {
+            it.copy(mapLoaded = v)
+        }
+    }
 }
 
 data class DeviceDetails(
     val gps: LatLng = LatLng(0.0, 0.0),
+    val mapLoaded: Boolean = false,
 )
