@@ -83,6 +83,7 @@ func main() {
 		r.With(dragoMiddleware.Auth).Handle("/graphql", srv)
 		r.Post("/signin", dragoHandler.SignIn(userController))
 		r.Post("/business/upload/logo", dragoHandler.BusinessLogoUpload())
+		r.Get("/ip", dragoHandler.Ipinfo())
 	})
 	r.Get("/", playground.Handler("Graphql playground", "/api/graphql"))
 
