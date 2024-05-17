@@ -10,8 +10,11 @@ import com.lomolo.courier.MainViewModel
 /* Drago view model root provider */
 object DragoViewModelProviders {
     val Factory = viewModelFactory {
+        lateinit var mainViewModel: MainViewModel
+
         initializer {
-            MainViewModel()
+            mainViewModel = MainViewModel(dragoApplication().container.dragoRestApiService)
+            mainViewModel
         }
     }
 }
